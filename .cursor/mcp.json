@@ -1,0 +1,27 @@
+{
+    "mcpServers": {
+      "supabase": {
+        "type": "command",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@supabase/mcp-server-supabase@latest",
+          "--read-only",
+          "--project-ref=the-coach"
+        ],
+        "env": {
+          "SUPABASE_ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvZ2VvcmtmbGdrc3VmeXNvamdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQyMzk5ODQsImV4cCI6MjA2OTgxNTk4NH0.UCSCNdaMuiHUOxETcnIqa51xLw9Cpr8W4-zl8ASaL5k"
+        },
+        "enabled": true
+      },
+      "vercel": {
+        "command": "npx",
+        "args": [
+          "--package", "@vercel/sdk",
+          "mcp", "start",
+          "--bearer-token", "<YOUR_VERCEL_TOKEN>"
+        ]
+      }
+    }
+  }
+  
