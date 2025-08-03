@@ -8,24 +8,34 @@ export default function SupabaseStatus() {
 
   useEffect(() => {
     async function checkConnection() {
-      // Check if environment variables are set
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.log('Checking Supabase connection...')
+      
+      // Add a timeout to prevent infinite loading
+      const timeoutId = setTimeout(() => {
+        console.log('Connection timeout - setting to error')
         setStatus('error')
-        return
-      }
-
+      }, 10000) // 10 second timeout
+      
       try {
         const { data, error } = await supabase.from('_dummy_table_').select('*').limit(1)
         
-        if (error && error.code === 'PGRST116') {
-          // This error means the table doesn't exist, but the connection is working
+        clearTimeout(timeoutId)
+        console.log('Supabase response:', { data, error })
+        
+        if (error && (error.code === 'PGRST116' || error.code === '42P01')) {
+          // These error codes mean the table doesn't exist, but the connection is working
+          console.log('Connection successful - table does not exist (expected)')
           setStatus('connected')
         } else if (error) {
+          console.log('Connection failed:', error)
           setStatus('error')
         } else {
+          console.log('Connection successful - unexpected success')
           setStatus('connected')
         }
       } catch (error) {
+        clearTimeout(timeoutId)
+        console.log('Connection error:', error)
         setStatus('error')
       }
     }
